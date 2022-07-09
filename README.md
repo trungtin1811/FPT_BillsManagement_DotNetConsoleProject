@@ -1,1 +1,1 @@
-# NewRepo4
+# Academic Assignment Console Project Using .NET6
