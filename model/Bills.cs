@@ -11,17 +11,16 @@ namespace ElectricityBillsManagement.model
         public string CustomerID { get; set; }
         public string CustomerFullName { get; set; }
         public string CustomerAddress { get; set; }
+        public string CustomerType { get; set; }
 
-        public Bills(string customerID, string customerFullName, string customerAddress)
+        public Bills(string customerID, string customerFullName, string customerAddress, string customerType) 
         {
             CustomerID = customerID;
             CustomerFullName = customerFullName;
             CustomerAddress = customerAddress;
+            CustomerType = customerType;
         }
-        public Bills()
-        {
 
-        }
         public virtual void Display()
         {
 

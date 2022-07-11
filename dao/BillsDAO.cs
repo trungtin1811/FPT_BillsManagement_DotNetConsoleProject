@@ -46,15 +46,15 @@ namespace ElectricityBillsManagement.dao
                 {
                     case 1:
                         {
-                            string? customerType = getType();
-                            if (customerType == null)
+                            string? targetedCustomer = GetTargetedCustomer();
+                            if (targetedCustomer == null)
                             {
                                 throw new Exception();
                             }
                             double consumedPower = IOUtils.GetDouble(0, "+ Input Consumed Power: ");
                             double unitPrice = IOUtils.GetDouble(0, "+ Input Unit Price: ");
                             double quota = IOUtils.GetDouble(0, "+ Input Quota: ");
-                            Bills bill = new LocalCustomerBills(customerID, customerFullName, customerAddress, customerType, consumedPower, unitPrice, quota);
+                            Bills bill = new LocalCustomerBills(customerID, customerFullName, customerAddress, targetedCustomer, consumedPower, unitPrice, quota);
                             bills.Add(bill);
                             break;
                         }
@@ -89,7 +89,7 @@ namespace ElectricityBillsManagement.dao
             }
             else
             {
-                Console.WriteLine($"|{"C.ID",-4}|{"C.FULL NAME",-15}|{"C.ADDRESS",-15}|{"C.TYPE",-10}|{"NATIONALITY",-15}|{"CONSUMED POWER",-15}|{"UNIT PRICE",-10}|{"QUOTA",-10}|{"TOTAL PRICE",-12}|");
+                Console.WriteLine($"|{"C.ID",-4}|{"C.FULL NAME",-15}|{"C.ADDRESS",-15}|{"TARGETED",-10}|{"NATIONALITY",-12}|{"CONSUMED POWER",-15}|{"UNIT PRICE",-10}|{"QUOTA",-6}|{"TOTAL PRICE",-12}|{"C.TYPE",-8}|");
                 bills.ForEach(b => { b.Display(); });
             }
 
@@ -102,13 +102,17 @@ namespace ElectricityBillsManagement.dao
 
             Console.WriteLine("Total Consumed Power by Customer type:");
 
-            Enum.GetNames(typeof(CustomerType)).ToList().ForEach(type =>
-            {
-                var sum = bills
-                            .Where(b => (b.GetType().Name.Equals("LocalCustomerBills") && ((LocalCustomerBills)b).CustomerType.Equals(type)))
-                            .Sum(b => ((LocalCustomerBills)b).ConsumedPower);
-                Console.WriteLine($"+ {type}: {sum}");
-            });
+
+            var localSum = bills
+                        .Where(b => (b.CustomerType.Equals(constant.CustomerType.LOCAL.ToString())))
+                        .Sum(b => ((LocalCustomerBills)b).ConsumedPower);
+            Console.WriteLine($"+ LOCAL CUSTOMER: {localSum}");
+
+            var foreignSum = bills
+                       .Where(b => (b.CustomerType.Equals(constant.CustomerType.FOREIGN.ToString())))
+                       .Sum(b => ((ForeignCustomerBills)b).ConsumedPower);
+            Console.WriteLine($"+ FOREIGN CUSTOMER: {foreignSum}");
+
 
             Console.WriteLine();
         }
@@ -134,22 +138,22 @@ namespace ElectricityBillsManagement.dao
         }
 
 
-        private string? getType()
+        private string? GetTargetedCustomer()
         {
             int choice = IOUtils.GetInt(1, 3, "+ Choose Customer type: \n\t1. LIVING\t2. BUSINESS\t3. PRODUCTION\nYour choice: ");
             switch (choice)
             {
                 case 1:
                     {
-                        return "LIVING";
+                        return constant.TargetedCustomer.LIVING.ToString();
                     }
                 case 2:
                     {
-                        return "BUSINESS";
+                        return constant.TargetedCustomer.BUSINESS.ToString();
                     }
                 case 3:
                     {
-                        return "PRODUCTION";
+                        return constant.TargetedCustomer.PRODUCTION.ToString();
                     }
             }
             return null;

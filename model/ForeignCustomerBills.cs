@@ -13,21 +13,17 @@ namespace ElectricityBillsManagement.model
         public double UnitPrice;
         public double TotalPrice;
 
-        public ForeignCustomerBills(string customerID, string customerFullName, string customerAddress, string nationality, double consumedPower, double unitPrice) : base(customerID, customerFullName, customerAddress)
+        public ForeignCustomerBills(string customerID, string customerFullName, string customerAddress, string nationality, double consumedPower, double unitPrice) : base(customerID, customerFullName, customerAddress, constant.CustomerType.FOREIGN.ToString())
         {
             Nationality = nationality;
             ConsumedPower = consumedPower;
             UnitPrice = unitPrice;
             TotalPrice = consumedPower * unitPrice;
         }
-        public ForeignCustomerBills()
-        {
-
-        }
 
         public override void Display()
         {
-            Console.WriteLine($"|{CustomerID,-4}|{CustomerFullName,-15}|{CustomerAddress,-15}|{"-",-10}|{Nationality,-15}|{ConsumedPower,-15}|{UnitPrice,-10}|{"-",-10}|{TotalPrice,-12}|");
+            Console.WriteLine($"|{CustomerID,-4}|{CustomerFullName,-15}|{CustomerAddress,-15}|{"-",-10}|{Nationality,-12}|{ConsumedPower,-15}|{UnitPrice,-10}|{"-",-6}|{TotalPrice,-12}|{CustomerType,-8}|");
         }
     }
 }

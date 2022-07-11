@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace ElectricityBillsManagement.constant
 {
-    public enum CustomerType
+    public enum TargetedCustomer
     {
-        LOCAL,
-        FOREIGN
+        LIVING,
+        BUSINESS,
+        PRODUCTION
     }
 }
